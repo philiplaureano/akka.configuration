@@ -89,5 +89,5 @@ var host = new ActorSystemHost(builder, installer, blockingStrategy);
 host.Run("MyActorSystem");
 ```
 
-Installation
+##Installation
 You can download the latest NuGet packages for Akka.Configuration [here](https://www.nuget.org/packages/Akka.Configuration)
