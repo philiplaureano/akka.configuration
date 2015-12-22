@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package >
+<package>
   <metadata>
     <id>$id$</id>
     <version>$version$</version>
@@ -10,7 +10,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright 2015</copyright>
+    <copyright>Copyright 2015 - Philip Laureano</copyright>
     <tags>akka configuration</tags>
+    <dependencies>
+      <dependency id="Akka" version="1.0.5"/>
+      <dependency id="Newtonsoft.Json" version="7.0.1"/>
+    </dependencies>
   </metadata>
 </package>

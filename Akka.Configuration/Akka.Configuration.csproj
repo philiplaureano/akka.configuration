@@ -48,7 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ActorSystemHost.cs" />
+    <Compile Include="IActorSystemBlockingStrategy.cs" />
+    <Compile Include="IActorSystemBuilder.cs" />
+    <Compile Include="IActorSystemInstaller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
