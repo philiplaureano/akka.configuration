@@ -8,6 +8,10 @@ namespace Akka.Configuration
         private readonly IActorSystemBuilder _builder;
         private readonly IActorSystemInstaller _installer;
 
+        public ActorSystemHost(IActorSystemBuilder builder, IActorSystemInstaller installer) : this(builder, installer, null)
+        {            
+        }
+
         public ActorSystemHost(IActorSystemBuilder builder, IActorSystemInstaller installer, IActorSystemBlockingStrategy blockingStrategy)
         {
             _builder = builder;
@@ -19,7 +23,7 @@ namespace Akka.Configuration
         {
             var actorSystem = _builder.Create(systemName);
             _installer.InstallActors(actorSystem);
-            _blockingStrategy.AwaitTermination(actorSystem);
+            _blockingStrategy?.AwaitTermination(actorSystem);
         }
     }
 }

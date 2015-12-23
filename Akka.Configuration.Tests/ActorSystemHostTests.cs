@@ -27,5 +27,22 @@ namespace Akka.Configuration.Tests
             A.CallTo(() => builder.Create(systemName)).MustHaveHappened();
             A.CallTo(() => installer.InstallActors(A<ActorSystem>.Ignored)).MustHaveHappened();
         }
+
+        [Test]
+        public void Should_create_actor_system_even_without_a_blocking_strategy()
+        {
+            var builder = A.Fake<IActorSystemBuilder>();
+            var installer = A.Fake<IActorSystemInstaller>();
+
+            var systemName = "FakeSystem";
+            A.CallTo(() => builder.Create(systemName))
+                .Returns(ActorSystem.Create(systemName));
+
+            var host = new ActorSystemHost(builder, installer);
+            host.Run(systemName);
+          
+            A.CallTo(() => builder.Create(systemName)).MustHaveHappened();
+            A.CallTo(() => installer.InstallActors(A<ActorSystem>.Ignored)).MustHaveHappened();
+        }
     }
 }
