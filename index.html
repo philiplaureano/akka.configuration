@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Akka.Configuration : A library for Akka.NET that removes most of the boilerplate code for creating and configuring actor systems.">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Akka.Configuration</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/philiplaureano/akka.configuration">View on GitHub</a>
+
+          <h1 id="project_title">Akka.Configuration</h1>
+          <h2 id="project_tagline">A library for Akka.NET that removes most of the boilerplate code for creating and configuring actor systems.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/philiplaureano/akka.configuration/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/philiplaureano/akka.configuration/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="akkaconfiguration" class="anchor" href="#akkaconfiguration" aria-hidden="true"><span class="octicon octicon-link"></span></a>akka.configuration</h1>
+
+<p>A library for <a href="http://getakka.net">Akka.NET</a> that handles the boilerplate code for creating and configuring actor systems.</p>
+
+<h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>Akka.Configuration is a very simple framework that provides the glue for creating and running actor systems in Akka.NET. It consists of the following interfaces:</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">IActorSystemBuilder</span>
+{
+  ActorSystem <span class="pl-en">Create</span>(<span class="pl-k">string</span> <span class="pl-smi">systemName</span>);
+}
+<span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">IActorSystemInstaller</span>
+{
+  <span class="pl-k">void</span> <span class="pl-en">InstallActors</span>(<span class="pl-k">ActorSystem</span> <span class="pl-smi">actorSystem</span>);
+}
+<span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">IActorSystemBlockingStrategy</span>
+{
+  <span class="pl-k">void</span> <span class="pl-en">AwaitTermination</span>(<span class="pl-k">ActorSystem</span> <span class="pl-smi">actorSystem</span>);
+}</pre></div>
+
+<h3>
+<a id="iactorsystembuilder" class="anchor" href="#iactorsystembuilder" aria-hidden="true"><span class="octicon octicon-link"></span></a>IActorSystemBuilder</h3>
+
+<p>The <em>IActorSystemBuilder</em> interface (and its subsequent implementations) will be responsible for creating the actor systems in Akka.NET. This includes creating any HOCON configuration entries, as well as attaching those entries to whatever actor system is created.</p>
+
+<h3>
+<a id="iactorsysteminstaller" class="anchor" href="#iactorsysteminstaller" aria-hidden="true"><span class="octicon octicon-link"></span></a>IActorSystemInstaller</h3>
+
+<p>The <em>IActorSystemInstaller</em> interface is responsible for adding your custom actors to any given actor system instance. In most cases, you'll probably want to create your own implementation of this class to ensure that you can install your actors into a particular actor system.</p>
+
+<h3>
+<a id="iactorsystemblockingstrategy" class="anchor" href="#iactorsystemblockingstrategy" aria-hidden="true"><span class="octicon octicon-link"></span></a>IActorSystemBlockingStrategy</h3>
+
+<p>The <em>IActorSystemBlockingStrategy</em> interface (as its name implies) determines whether or not your actor system should be blocking your execution thread until the actor system terminates. If you're running your actor system as a console application, I recommend blocking the thread so that your application doesn't prematurely terminate, using a blocking implementation that looks like this:</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">WaitForTermination</span> : <span class="pl-k">IActorSystemBlockingStrategy</span>
+{
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">AwaitTermination</span>(<span class="pl-k">ActorSystem</span> <span class="pl-smi">actorSystem</span>)
+    {
+        actorSystem.AwaitTermination();
+    }
+}
+</pre></div>
+
+<p>Alternatively, if you prefer not to block the thread, you can also do the implementation like this:</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">NonBlockingStrategy</span> : <span class="pl-k">IActorSystemBlockingStrategy</span>
+{
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">AwaitTermination</span>(<span class="pl-k">ActorSystem</span> <span class="pl-smi">actorSystem</span>)
+    {
+        <span class="pl-c">// Do nothing since no blocking needs to be done here</span>
+    }
+}</pre></div>
+
+<h2>
+<a id="open-for-extension-but-closed-to-modification" class="anchor" href="#open-for-extension-but-closed-to-modification" aria-hidden="true"><span class="octicon octicon-link"></span></a>Open for Extension, but Closed to Modification</h2>
+
+<p>The idea behind Akka.Configuration is to create a simple framework that can be extended indefinitely without having to worrying about breaking changes caused by third-party libraries. That's why there are so few classes--this library encompasses the basic steps for setting up an Akka.NET actor system.</p>
+
+<h2>
+<a id="extension-libraries" class="anchor" href="#extension-libraries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Extension Libraries</h2>
+
+<p><a href="https://github.com/philiplaureano/akka.configuration.builders">Akka.Configuration.Builders.*</a> - These libraries have class implementations for the <em>IActorSystemBuilder</em> interface that allow you to generate HOCON config files using standard .NET dictionaries. You can find the NuGet packages for <a href="https://github.com/philiplaureano/akka.configuration.builders">Akka.Configuration.Builders.*</a> <a href="https://www.nuget.org/packages?q=akka.configuration">here</a>.</p>
+
+<h2>
+<a id="putting-it-all-together" class="anchor" href="#putting-it-all-together" aria-hidden="true"><span class="octicon octicon-link"></span></a>Putting it all together</h2>
+
+<p>Once you have your custom implementations for all three interfaces in hand, then this is where the ActorSystemHost class can glue all of those implementations together:</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">ActorSystemHost</span>
+{
+    <span class="pl-k">private</span> <span class="pl-k">readonly</span> IActorSystemBlockingStrategy _blockingStrategy;
+    <span class="pl-k">private</span> <span class="pl-k">readonly</span> IActorSystemBuilder _builder;
+    <span class="pl-k">private</span> <span class="pl-k">readonly</span> IActorSystemInstaller _installer;
+
+    <span class="pl-k">public</span> <span class="pl-en">ActorSystemHost</span>(<span class="pl-k">IActorSystemBuilder</span> <span class="pl-smi">builder</span>, <span class="pl-k">IActorSystemInstaller</span> <span class="pl-smi">installer</span>, 
+        <span class="pl-k">IActorSystemBlockingStrategy</span> <span class="pl-smi">blockingStrategy</span>)
+    {
+        _builder = builder;
+        _installer = installer;
+        _blockingStrategy = blockingStrategy;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">Run</span>(<span class="pl-k">string</span> <span class="pl-smi">systemName</span>)
+    {
+        <span class="pl-k">var</span> actorSystem = _builder.Create(systemName);
+        _installer.InstallActors(actorSystem);
+        _blockingStrategy.AwaitTermination(actorSystem);
+    }
+}</pre></div>
+
+<p>As you can see, the implementation is very simple, and all the code you see in the <em>ActorSystemHost.Run</em> will cover 90% of the boilerplate code required to get your actor system up and running. Here's an example of how to use the <em>ActorSystemHost</em> class:</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> blockingStrategy = <span class="pl-k">new</span> WaitForTermination();
+<span class="pl-k">var</span> builder = <span class="pl-k">new</span> YourBuilderImplementation();
+<span class="pl-k">var</span> installer <span class="pl-k">new</span> YourActorSystemInstaller();
+
+<span class="pl-k">var</span> host = <span class="pl-k">new</span> ActorSystemHost(builder, installer, blockingStrategy);
+host.Run(<span class="pl-s"><span class="pl-pds">"</span>MyActorSystem<span class="pl-pds">"</span></span>);</pre></div>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>You can download the latest NuGet packages for Akka.Configuration <a href="https://www.nuget.org/packages/Akka.Configuration">here</a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Akka.Configuration maintained by <a href="https://github.com/philiplaureano">philiplaureano</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
