@@ -53,7 +53,7 @@ public class NonBlockingStrategy : IActorSystemBlockingStrategy
 The idea behind Akka.Configuration is to create a simple framework that can be extended indefinitely without having to worrying about breaking changes caused by third-party libraries. That's why there are so few classes--this library encompasses the basic steps for setting up an Akka.NET actor system.
 
 ## Extension Libraries
-[Akka.Configuration.Builders.*](https://github.com/philiplaureano/akka.configuration.builders) - These libraries have class implementations for the *IActorSystemBuilder* interface that allow you to generate HOCON config files using standard .NET dictionaries. You can find the NuGet packages [here](https://www.nuget.org/packages?q=akka.configuration).
+[Akka.Configuration.Builders.*](https://github.com/philiplaureano/akka.configuration.builders) - These libraries have class implementations for the *IActorSystemBuilder* interface that allow you to generate HOCON config files using standard .NET dictionaries. You can find the NuGet packages for [Akka.Configuration.Builders.*](https://github.com/philiplaureano/akka.configuration.builders) [here](https://www.nuget.org/packages?q=akka.configuration).
 
 ## Putting it all together
 Once you have your custom implementations for all three interfaces in hand, then this is where the ActorSystemHost class can glue all of those implementations together:
