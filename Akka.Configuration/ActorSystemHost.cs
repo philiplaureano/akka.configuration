@@ -2,7 +2,7 @@
 
 namespace Akka.Configuration
 {
-    public class ActorSystemHost
+    public class ActorSystemHost : IActorSystemHost
     {
         private readonly IActorSystemBlockingStrategy _blockingStrategy;
         private readonly IActorSystemBuilder _builder;

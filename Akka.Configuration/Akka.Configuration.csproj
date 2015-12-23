@@ -51,6 +51,7 @@
     <Compile Include="ActorSystemHost.cs" />
     <Compile Include="IActorSystemBlockingStrategy.cs" />
     <Compile Include="IActorSystemBuilder.cs" />
+    <Compile Include="IActorSystemHost.cs" />
     <Compile Include="IActorSystemInstaller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
